@@ -7,6 +7,7 @@ global using System.Text;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.OpenApi.Models;
 global using Swashbuckle.AspNetCore.Filters;
+using Microsoft.Extensions.Configuration;
 
 // Youtube bron, Patrick God: https://www.youtube.com/watch?v=6sMPvucWNRE
 
@@ -28,6 +29,7 @@ namespace JwtWebApiDotNet7
                 options.AddSecurityDefinition(
                     "oauth2", new OpenApiSecurityScheme
                     {
+                        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token})",
                         In = ParameterLocation.Header,
                         Name = "Authorization",
                         Type = SecuritySchemeType.ApiKey
@@ -36,7 +38,20 @@ namespace JwtWebApiDotNet7
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 
-            builder.Services.AddAuthentication().AddJwtBearer();
+            builder.Services.AddAuthentication().AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(
+                            builder.Configuration.GetSection("AppSettings:Token").Value!
+                        )
+                    )
+                };
+            });
 
             var app = builder.Build();
 

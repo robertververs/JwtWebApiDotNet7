@@ -12,6 +12,16 @@
             _configuration = configuration;
         }
 
+        [HttpGet, Authorize]
+        public  ActionResult<string> GetMe()
+        {
+            var userName = User?.Identity?.Name;
+            var userName2 = User.FindFirstValue(ClaimTypes.Name);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+
+            return Ok(new { userName, userName2, role });
+        } 
+
         [HttpPost("register")]
         public ActionResult<User> Register(UserDto request)
         {
@@ -45,7 +55,9 @@
         {
             List<Claim> claims = new List<Claim> 
             { 
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.Role, "User")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
