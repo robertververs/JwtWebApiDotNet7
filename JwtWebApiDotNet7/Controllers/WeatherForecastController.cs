@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
 namespace JwtWebApiDotNet7.Controllers
 {
     [ApiController]

@@ -1,10 +1,4 @@
-﻿
-
-
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-
-namespace JwtWebApiDotNet7.Controllers
+﻿namespace JwtWebApiDotNet7.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
