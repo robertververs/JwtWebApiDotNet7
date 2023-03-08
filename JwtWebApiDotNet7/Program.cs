@@ -8,6 +8,8 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.OpenApi.Models;
 global using Swashbuckle.AspNetCore.Filters;
 
+// Youtube bron, Patrick God: https://www.youtube.com/watch?v=6sMPvucWNRE
+
 namespace JwtWebApiDotNet7
 {
     public class Program
