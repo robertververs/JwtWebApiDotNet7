@@ -33,7 +33,6 @@ namespace JwtWebApiDotNet7
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

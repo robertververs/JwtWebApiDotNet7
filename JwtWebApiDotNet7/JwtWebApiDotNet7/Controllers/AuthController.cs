@@ -39,10 +39,12 @@ namespace JwtWebApiDotNet7.Controllers
 
             if(!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
-                return BadRequest("Invalid password.");
+                return BadRequest("Wrong password.");
             }
 
-            return Ok(user);
+            string token = CreateToken(user);
+
+            return Ok(token);
         }
 
         private string CreateToken(User user)
@@ -55,12 +57,12 @@ namespace JwtWebApiDotNet7.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 _configuration.GetSection("AppSettings:Token").Value!));
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
                     claims: claims,
                     expires: DateTime.Now.AddDays(1),
-                    signingCredentials: creds
+                    signingCredentials: credentials
                 );
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
