@@ -25,12 +25,12 @@ namespace JwtWebApiDotNet7.Controllers
             _userService = userService;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet("GetMyName"), Authorize]
         public ActionResult<string> GetMyName()
         {
-            return Ok(_userService.GetMyName());
+            var userName = User?.Identity?.Name;
+            return Ok(new { userName });
 
-            //var userName = User?.Identity?.Name;
             //var roleClaims = User?.FindAll(ClaimTypes.Role);
             //var roles = roleClaims?.Select(c => c.Value).ToList();
             //var roles2 = User?.Claims
@@ -38,6 +38,16 @@ namespace JwtWebApiDotNet7.Controllers
             //    .Select(c => c.Value)
             //    .ToList();
             //return Ok(new { userName, roles, roles2 });
+
+            //return Ok(_userService.GetMyName());
+
+        }
+
+        [HttpGet("GetMyHashCode"), Authorize]
+        public ActionResult<string> GetMyHashCode() 
+        {
+            var hashCode = User?.Identity?.GetHashCode();
+            return Ok(new {hashCode});
         }
 
         [HttpPost("register")]
