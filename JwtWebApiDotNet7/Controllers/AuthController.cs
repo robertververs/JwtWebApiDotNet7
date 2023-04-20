@@ -1,10 +1,14 @@
-﻿namespace JwtWebApiDotNet7.Controllers
+﻿using JwtWebApiDotNet7.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace JwtWebApiDotNet7.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : Controller
     {
-        public static User user = new User() { };
+        public static User user = new User();
         private readonly IConfiguration _configuration;
 
         public AuthController(IConfiguration configuration)
@@ -25,10 +29,11 @@
         [HttpPost("register")]
         public ActionResult<User> Register(UserDto request)
         {
-            string passswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            // BCript is the modern way and also the most secure method to generate a hash
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
             
             user.Username = request.Username;
-            user.PasswordHash = passswordHash;
+            user.PasswordHash = passwordHash;
             
             return Ok(user);
         }
@@ -61,7 +66,7 @@
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value!));
+                _configuration.GetSection("Authentication:Schemes:Bearer:SigningKeys:0:Value").Value!));
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
