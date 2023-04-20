@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
     dotnet user-secrets list 
 
     Hoe in Swagger uit te voeren:
+    ----------------------------
     1: POST /api/Auth/register > username en ww kiezen
     2: POST /api/Auth/login > inloggen met de bij 1 gekozen username/ww
     3: (als inloggen is gelukt, server response code = 200) Kopieer de Response body
