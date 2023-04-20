@@ -29,10 +29,14 @@ namespace JwtWebApiDotNet7.Controllers
         public ActionResult<string> GetMyName()
         {
             var userName = User?.Identity?.Name;
-            return Ok(new { userName });
+            var role = User?.FindAll(ClaimTypes.Role);
+            
+            //return Ok(new { userName });
 
-            //var roleClaims = User?.FindAll(ClaimTypes.Role);
-            //var roles = roleClaims?.Select(c => c.Value).ToList();
+            var roleClaims = User?.FindAll(ClaimTypes.Role);
+            var roles = roleClaims?.Select(c => c.Value).ToList();
+            return Ok(new { userName, roles });
+
             //var roles2 = User?.Claims
             //    .Where(c => c.Type == ClaimTypes.Role)
             //    .Select(c => c.Value)
